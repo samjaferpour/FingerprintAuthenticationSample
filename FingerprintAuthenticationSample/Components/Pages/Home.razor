@@ -1,0 +1,32 @@
+﻿@page "/"
+@using FingerprintAuthenticationSample.Services
+
+@inject IFingerprintAuthenticationService AuthService
+
+<h3>Authenticate with Fingerprint</h3>
+
+<button @onclick="Authenticate">Authenticate</button>
+
+@code {
+    private async Task Authenticate()
+    {
+        bool isAuthenticated = await AuthService.AuthenticateAsync();
+
+        if (isAuthenticated)
+        {
+            await DisplayAlert("Authentication", "Authentication Successful!", "OK");
+        }
+        else
+        {
+            await DisplayAlert("Authentication", "Authentication Failed!", "OK");
+        }
+    }
+
+    private Task DisplayAlert(string title, string message, string cancel)
+    {
+        return MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            return Application.Current.MainPage.DisplayAlert(title, message, cancel);
+        });
+    }
+}
